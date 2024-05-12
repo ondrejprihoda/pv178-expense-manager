@@ -46,6 +46,21 @@ namespace ExpenseManager.DataAccess.Migrations
                         {
                             CategoryId = 3,
                             Name = "Entertainment"
+                        },
+                        new
+                        {
+                            CategoryId = 4,
+                            Name = "Deposit"
+                        },
+                        new
+                        {
+                            CategoryId = 5,
+                            Name = "Withdrawal"
+                        },
+                        new
+                        {
+                            CategoryId = 6,
+                            Name = "Transfer"
                         });
                 });
 

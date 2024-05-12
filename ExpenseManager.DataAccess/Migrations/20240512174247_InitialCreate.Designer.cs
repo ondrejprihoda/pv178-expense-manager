@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExpenseManager.DataAccess.Migrations
 {
     [DbContext(typeof(ExpenseManagerDbContext))]
-    [Migration("20240512151937_InitialCreate")]
+    [Migration("20240512174247_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -49,6 +49,21 @@ namespace ExpenseManager.DataAccess.Migrations
                         {
                             CategoryId = 3,
                             Name = "Entertainment"
+                        },
+                        new
+                        {
+                            CategoryId = 4,
+                            Name = "Deposit"
+                        },
+                        new
+                        {
+                            CategoryId = 5,
+                            Name = "Withdrawal"
+                        },
+                        new
+                        {
+                            CategoryId = 6,
+                            Name = "Transfer"
                         });
                 });
 

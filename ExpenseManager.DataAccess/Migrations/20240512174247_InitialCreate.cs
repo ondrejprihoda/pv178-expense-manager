@@ -207,7 +207,10 @@ namespace ExpenseManager.DataAccess.Migrations
                 {
                     { 1, "Food" },
                     { 2, "Utilities" },
-                    { 3, "Entertainment" }
+                    { 3, "Entertainment" },
+                    { 4, "Deposit" },
+                    { 5, "Withdrawal" },
+                    { 6, "Transfer" }
                 });
 
             migrationBuilder.CreateIndex(
