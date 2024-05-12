@@ -1,0 +1,23 @@
+﻿@model TransactionIndexViewModel
+
+<h2>Your Transactions</h2>
+<p>Balance: @Model.Balance</p>
+<table>
+    <tr>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Description</th>
+    </tr>
+    @foreach (var transaction in Model.Transactions)
+    {
+        <tr>
+            <td>@transaction.TransactionDate.ToShortDateString()</td>
+            <td>@transaction.Amount</td>
+            <td>@transaction.Description</td>
+        </tr>
+    }
+</table>
+
+<!-- Pagination logic here -->
+
+<a href="@Url.Action("Add", "Transaction")">Add New Transaction</a>

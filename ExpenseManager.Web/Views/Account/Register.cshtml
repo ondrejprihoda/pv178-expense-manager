@@ -1,0 +1,18 @@
+﻿@model ExpenseManager.Web.Models.RegisterViewModel
+
+<form asp-action="Register" method="post">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+        <label asp-for="Email"></label>
+        <input asp-for="Email" type="email" />
+    </div>
+    <div>
+        <label asp-for="Password"></label>
+        <input asp-for="Password" type="password" />
+    </div>
+    <div>
+        <label asp-for="ConfirmPassword"></label>
+        <input asp-for="ConfirmPassword" type="password" />
+    </div>
+    <button type="submit">Register</button>
+</form>
