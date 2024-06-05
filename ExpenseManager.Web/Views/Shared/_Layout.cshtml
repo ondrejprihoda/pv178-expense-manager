@@ -22,25 +22,25 @@
                         @if (User.Identity is not null && User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Transaction" asp-action="Index">Dashboard</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AccessDenied">Dashboard</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Transaction" asp-action="Index">Transactions</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Transaction" asp-action="Index">Categories</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AccessDenied">Categories</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Transaction" asp-action="Index">Statistics</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AccessDenied">Statistics</a>
                             </li
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Transaction" asp-action="Index">Import/Export</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AccessDenied">Import/Export</a>
                             </li>
                         }
                         else
                         {
                             <li>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Transaction" asp-action="Index">Features</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AccessDenied">Features</a>
                             </li>
                         }
                     </ul>

@@ -15,13 +15,11 @@ namespace ExpenseManager.Web.Controllers
             _signInManager = signInManager;
         }
 
-        // Register GET
         public IActionResult Register()
         {
             return View();
         }
 
-        // Register POST
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
@@ -42,13 +40,11 @@ namespace ExpenseManager.Web.Controllers
             return View(model);
         }
 
-        // Login GET
         public IActionResult Login()
         {
             return View();
         }
 
-        // Login POST
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
@@ -68,11 +64,15 @@ namespace ExpenseManager.Web.Controllers
             return View(model);
         }
 
-        // Logout
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
     }
 }
