@@ -22,7 +22,7 @@
                         @if (User.Identity is not null && User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AccessDenied">Dashboard</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Transaction" asp-action="Dashboard">Dashboard</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Transaction" asp-action="Index">Transactions</a>

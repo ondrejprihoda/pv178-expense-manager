@@ -30,7 +30,7 @@ namespace ExpenseManager.Web.Controllers
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Dashboard", "Transaction");
                 }
                 foreach (var error in result.Errors)
                 {
@@ -53,7 +53,7 @@ namespace ExpenseManager.Web.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Dashboard", "Transaction");
                 }
                 else
                 {

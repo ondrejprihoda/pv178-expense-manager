@@ -6,7 +6,7 @@ namespace ExpenseManager.DataAccess.Models
     {
         public int TransactionId { get; set; }
         public string UserId { get; set; }
-        public decimal Amount { get; set; }
+        public double Amount { get; set; }
         public DateTime TransactionDate { get; set; }
         public string Description { get; set; }
         public int CategoryId { get; set; }
