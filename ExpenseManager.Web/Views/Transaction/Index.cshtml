@@ -42,6 +42,7 @@
                     <td>@transaction.Amount</td>
                     <td>@transaction.Description</td>
                     <td><a href="@Url.Action("Remove", "Transaction", new { transactionId = transaction.TransactionId })">Delete</a></td>
+                    <td><a href="@Url.Action("Update", "Transaction", new { transactionId = transaction.TransactionId })">Edit</a></td>
                 </tr>
             }
         </table>

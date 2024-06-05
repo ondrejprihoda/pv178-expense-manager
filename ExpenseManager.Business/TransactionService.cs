@@ -73,12 +73,34 @@ public class TransactionService
             .SumAsync(t => t.Amount);
     }
 
+    // get transaction by id
+    public async Task<Transaction?> GetTransaction(int transactionId)
+    {
+        return await _context.Transactions.FindAsync(transactionId);
+    }
+
     public async Task<bool> RemoveTransaction(int transactionId)
     {
         var transaction = await _context.Transactions.FindAsync(transactionId);
         if (transaction is not null)
         {
             _context.Transactions.Remove(transaction);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        return false;
+    }
+
+    // update transaction
+    public async Task<bool> UpdateTransaction(Transaction transaction)
+    {
+        var existingTransaction = await _context.Transactions.FindAsync(transaction.TransactionId);
+        if (existingTransaction is not null)
+        {
+            existingTransaction.Amount = transaction.Amount;
+            existingTransaction.TransactionDate = transaction.TransactionDate;
+            existingTransaction.Description = transaction.Description;
+            existingTransaction.CategoryId = transaction.CategoryId;
             await _context.SaveChangesAsync();
             return true;
         }

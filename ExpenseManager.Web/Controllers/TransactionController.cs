@@ -76,6 +76,53 @@ public class TransactionController : Controller
         return Redirect(referringUrl);
     }
 
+    public async Task<IActionResult> Update(int transactionId)
+    {
+        var transaction = await _transactionService.GetTransaction(transactionId);
+        if (transaction is null)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+
+        var viewModel = new TransactionViewModel
+        {
+            Id = transaction.TransactionId,
+            Amount = transaction.Amount,
+            TransactionDate = transaction.TransactionDate,
+            Description = transaction.Description,
+            CategoryId = transaction.CategoryId
+        };
+
+        var userId = _userManager.GetUserId(User);
+        ViewBag.Categories = new SelectList(await _categoryService.GetUserCategories(userId), "CategoryId", "Name");
+        return View(viewModel);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Update(TransactionViewModel model)
+    {
+        var userId = _userManager.GetUserId(User);
+        if (ModelState.IsValid)
+        {
+
+            var transaction = new Transaction
+            {
+                UserId = userId,
+                TransactionId = model.Id,
+                Amount = model.Amount,
+                TransactionDate = model.TransactionDate,
+                Description = model.Description,
+                CategoryId = model.CategoryId
+            };
+            await _transactionService.UpdateTransaction(transaction);
+            return RedirectToAction(nameof(Index));
+        }
+
+        ViewBag.Categories = new SelectList(await _categoryService.GetUserCategories(userId), "CategoryId", "Name");
+        return View(model);
+    }
+
     public async Task<IActionResult> Dashboard()
     {
         var userId = _userManager.GetUserId(User);
