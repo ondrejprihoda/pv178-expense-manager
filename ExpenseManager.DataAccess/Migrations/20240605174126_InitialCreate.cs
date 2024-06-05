@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace ExpenseManager.DataAccess.Migrations
 {
     /// <inheritdoc />
@@ -58,6 +56,7 @@ namespace ExpenseManager.DataAccess.Migrations
                 {
                     CategoryId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    UserId = table.Column<string>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -178,7 +177,7 @@ namespace ExpenseManager.DataAccess.Migrations
                     TransactionId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     UserId = table.Column<string>(type: "TEXT", nullable: false),
-                    Amount = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Amount = table.Column<double>(type: "REAL", nullable: false),
                     TransactionDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
                     CategoryId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -198,19 +197,6 @@ namespace ExpenseManager.DataAccess.Migrations
                         principalTable: "Categories",
                         principalColumn: "CategoryId",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.InsertData(
-                table: "Categories",
-                columns: new[] { "CategoryId", "Name" },
-                values: new object[,]
-                {
-                    { 1, "Food" },
-                    { 2, "Utilities" },
-                    { 3, "Entertainment" },
-                    { 4, "Deposit" },
-                    { 5, "Withdrawal" },
-                    { 6, "Transfer" }
                 });
 
             migrationBuilder.CreateIndex(

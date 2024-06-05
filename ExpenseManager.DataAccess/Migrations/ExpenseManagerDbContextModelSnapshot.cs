@@ -27,41 +27,13 @@ namespace ExpenseManager.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("CategoryId");
 
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            CategoryId = 1,
-                            Name = "Food"
-                        },
-                        new
-                        {
-                            CategoryId = 2,
-                            Name = "Utilities"
-                        },
-                        new
-                        {
-                            CategoryId = 3,
-                            Name = "Entertainment"
-                        },
-                        new
-                        {
-                            CategoryId = 4,
-                            Name = "Deposit"
-                        },
-                        new
-                        {
-                            CategoryId = 5,
-                            Name = "Withdrawal"
-                        },
-                        new
-                        {
-                            CategoryId = 6,
-                            Name = "Transfer"
-                        });
                 });
 
             modelBuilder.Entity("ExpenseManager.DataAccess.Models.Transaction", b =>
@@ -70,8 +42,8 @@ namespace ExpenseManager.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("TEXT");
+                    b.Property<double>("Amount")
+                        .HasColumnType("REAL");
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("INTEGER");

@@ -1,3 +1,4 @@
+using ExpenseManager.Business;
 using ExpenseManager.DataAccess.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<TransactionService>();
+builder.Services.AddScoped<CategoryService>();
 
 // Configure Entity Framework and Identity
 builder.Services.AddDbContext<ExpenseManagerDbContext>(options =>

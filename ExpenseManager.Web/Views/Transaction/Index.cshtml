@@ -1,7 +1,6 @@
 ﻿@model TransactionIndexViewModel
 
 <style>
-    /* Add your CSS styles here */
     .pagination {
         display: flex;
         list-style: none;
@@ -28,23 +27,27 @@
 <div class="text-center">
     <div class="display-1">@Model.Balance CZK</div>
     <a href="@Url.Action("Add", "Transaction")">Add New Transaction</a>
-    <table>
-        <tr>
-            <th>Date</th>
-            <th>Amount</th>
-            <th>Description</th>
-        </tr>
-        @foreach (var transaction in Model.Transactions)
-        {
+    @if (Model.Transactions.Count() > 0)
+    {
+        <table>
             <tr>
-                <td>@transaction.TransactionDate.ToShortDateString()</td>
-                <td>@transaction.Amount</td>
-                <td>@transaction.Description</td>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Description</th>
             </tr>
-        }
-    </table>
+            @foreach (var transaction in Model.Transactions)
+            {
+                <tr>
+                    <td>@transaction.TransactionDate.ToShortDateString()</td>
+                    <td>@transaction.Amount</td>
+                    <td>@transaction.Description</td>
+                    <td><a href="@Url.Action("Remove", "Transaction", new { transactionId = transaction.TransactionId })">Delete</a></td>
+                </tr>
+            }
+        </table>
+    }
 
-    <!-- Pagination logic here -->
+    <!-- Pagination -->
     <ul class="pagination">
         @for (int i = 1; i <= Math.Ceiling((double)Model.TotalCount / Model.PageSize); i++)
         {

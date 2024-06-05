@@ -73,9 +73,15 @@ public class TransactionService
             .SumAsync(t => t.Amount);
     }
 
-    // TODO move into CategoryService
-    public async Task<IEnumerable<Category>> GetAllCategories()
+    public async Task<bool> RemoveTransaction(int transactionId)
     {
-        return await _context.Categories.ToListAsync();
+        var transaction = await _context.Transactions.FindAsync(transactionId);
+        if (transaction is not null)
+        {
+            _context.Transactions.Remove(transaction);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        return false;
     }
 }

@@ -1,4 +1,5 @@
-﻿using ExpenseManager.DataAccess.Models;
+﻿using ExpenseManager.Business;
+using ExpenseManager.DataAccess.Models;
 using ExpenseManager.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -10,11 +11,13 @@ using System.Threading.Tasks;
 public class TransactionController : Controller
 {
     private readonly TransactionService _transactionService;
+    private readonly CategoryService _categoryService;
     private readonly UserManager<IdentityUser> _userManager;
 
-    public TransactionController(TransactionService transactionService, UserManager<IdentityUser> userManager)
+    public TransactionController(TransactionService transactionService, CategoryService categoryService, UserManager<IdentityUser> userManager)
     {
         _transactionService = transactionService;
+        _categoryService = categoryService;
         _userManager = userManager;
     }
 
@@ -37,7 +40,8 @@ public class TransactionController : Controller
 
     public async Task<IActionResult> Add()
     {
-        ViewBag.Categories = new SelectList(await _transactionService.GetAllCategories(), "CategoryId", "Name");
+        var userId = _userManager.GetUserId(User);
+        ViewBag.Categories = new SelectList(await _categoryService.GetUserCategories(userId), "CategoryId", "Name");
         return View();
     }
 
@@ -45,9 +49,10 @@ public class TransactionController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Add(TransactionViewModel model)
     {
+        var userId = _userManager.GetUserId(User);
         if (ModelState.IsValid)
         {
-            var userId = _userManager.GetUserId(User);
+            
             var transaction = new Transaction
             {
                 UserId = userId,
@@ -59,7 +64,16 @@ public class TransactionController : Controller
             await _transactionService.AddTransaction(transaction);
             return RedirectToAction(nameof(Index));
         }
+
+        ViewBag.Categories = new SelectList(await _categoryService.GetUserCategories(userId), "CategoryId", "Name");
         return View(model);
+    }
+
+    public async Task<IActionResult> Remove(int transactionId)
+    {
+        await _transactionService.RemoveTransaction(transactionId);
+        string referringUrl = Request.Headers["Referer"].ToString();
+        return Redirect(referringUrl);
     }
 
     public async Task<IActionResult> Dashboard()
