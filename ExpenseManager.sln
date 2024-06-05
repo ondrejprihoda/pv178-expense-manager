@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpenseManager.Business", "ExpenseManager.Business\ExpenseManager.Business.csproj", "{18DF44AA-31C8-411B-B6DE-B1832189FC11}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpenseManager.Business", "ExpenseManager.Business\ExpenseManager.Business.csproj", "{18DF44AA-31C8-411B-B6DE-B1832189FC11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpenseManager.DataAccess", "ExpenseManager.DataAccess\ExpenseManager.DataAccess.csproj", "{CAFEBC34-E589-4217-B043-70844BD735C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpenseManager.DataAccess", "ExpenseManager.DataAccess\ExpenseManager.DataAccess.csproj", "{CAFEBC34-E589-4217-B043-70844BD735C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpenseManager.Web", "ExpenseManager.Web\ExpenseManager.Web.csproj", "{607DE93F-C13D-4B7F-AAFC-F5A3F5086163}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpenseManager.Web", "ExpenseManager.Web\ExpenseManager.Web.csproj", "{607DE93F-C13D-4B7F-AAFC-F5A3F5086163}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

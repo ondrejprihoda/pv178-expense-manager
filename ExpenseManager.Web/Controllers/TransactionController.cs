@@ -18,16 +18,19 @@ public class TransactionController : Controller
         _userManager = userManager;
     }
 
-    public async Task<IActionResult> Index(int pageIndex = 1, int pageSize = 10)
+    public async Task<IActionResult> Index(int pageIndex = 1, int pageSize = 2)
     {
         var userId = _userManager.GetUserId(User);
-        var (transactions, balance) = await _transactionService.GetUserTransactionsWithBalance(userId, pageIndex, pageSize);
+        var (transactions, totalCount) = await _transactionService.GetUserTransactions(userId, pageIndex, pageSize);
+        var balance = await _transactionService.GetUserBalance(userId);
+
         var viewModel = new TransactionIndexViewModel
         {
-            Transactions = transactions,
+            Transactions = transactions.ToList(),
             Balance = balance,
             CurrentPage = pageIndex,
-            PageSize = pageSize
+            PageSize = pageSize,
+            TotalCount = totalCount
         };
         return View(viewModel);
     }
@@ -57,5 +60,18 @@ public class TransactionController : Controller
             return RedirectToAction(nameof(Index));
         }
         return View(model);
+    }
+
+    public async Task<IActionResult> Dashboard()
+    {
+        var userId = _userManager.GetUserId(User);
+        var transactions = await _transactionService.GetLastNUserTransactions(userId, 5);
+        var balance = await _transactionService.GetUserBalance(userId);
+        var viewModel = new TransactionDashboardViewModel
+        {
+            Transactions = transactions,
+            Balance = balance
+        };
+        return View(viewModel);
     }
 }

@@ -21,7 +21,7 @@ public class TransactionService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<(IEnumerable<Transaction>, decimal)> GetUserTransactionsWithBalance(string userId, int pageIndex, int pageSize)
+    public async Task<(IEnumerable<Transaction>, double)> GetUserTransactionsWithBalance(string userId, int pageIndex, int pageSize)
     {
         var transactionsQuery = _context.Transactions
             .Where(t => t.UserId == userId)
@@ -38,6 +38,39 @@ public class TransactionService
             .Sum(t => t.Amount);
 
         return (transactions, balance);
+    }
+
+    // get user transactions with pagination (pageIndex, pageSize and totalCount)
+    public async Task<(IEnumerable<Transaction>, int)> GetUserTransactions(string userId, int pageIndex, int pageSize)
+    {
+        var transactionsQuery = _context.Transactions
+            .Where(t => t.UserId == userId)
+            .OrderByDescending(t => t.TransactionDate);
+
+        var totalCount = await transactionsQuery.CountAsync();
+
+        var transactions = await transactionsQuery
+            .Skip((pageIndex - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return (transactions, totalCount);
+    }
+
+    public async Task<IEnumerable<Transaction>> GetLastNUserTransactions(string userId, int transactionCount)
+    {
+        return await _context.Transactions
+            .Where(t => t.UserId == userId)
+            .OrderByDescending(t => t.TransactionDate)
+            .Take(transactionCount)
+            .ToListAsync();
+    }
+
+    public async Task<double> GetUserBalance(string userId)
+    {
+        return await _context.Transactions
+            .Where(t => t.UserId == userId)
+            .SumAsync(t => t.Amount);
     }
 
     // TODO move into CategoryService

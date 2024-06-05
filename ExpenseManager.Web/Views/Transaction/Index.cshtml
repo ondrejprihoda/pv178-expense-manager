@@ -1,23 +1,54 @@
 ﻿@model TransactionIndexViewModel
 
-<h2>Your Transactions</h2>
-<p>Balance: @Model.Balance</p>
-<table>
-    <tr>
-        <th>Date</th>
-        <th>Amount</th>
-        <th>Description</th>
-    </tr>
-    @foreach (var transaction in Model.Transactions)
-    {
-        <tr>
-            <td>@transaction.TransactionDate.ToShortDateString()</td>
-            <td>@transaction.Amount</td>
-            <td>@transaction.Description</td>
-        </tr>
+<style>
+    /* Add your CSS styles here */
+    .pagination {
+        display: flex;
+        list-style: none;
+        padding: 0;
     }
-</table>
 
-<!-- Pagination logic here -->
+        .pagination li {
+            margin-right: 5px;
+        }
 
-<a href="@Url.Action("Add", "Transaction")">Add New Transaction</a>
+            .pagination li a {
+                text-decoration: none;
+                padding: 5px 10px;
+                border: 1px solid #ccc;
+                color: #333;
+            }
+
+                .pagination li a.active {
+                    background-color: #007bff;
+                    color: #fff;
+                }
+</style>
+
+<div class="text-center">
+    <div class="display-1">@Model.Balance CZK</div>
+    <a href="@Url.Action("Add", "Transaction")">Add New Transaction</a>
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Description</th>
+        </tr>
+        @foreach (var transaction in Model.Transactions)
+        {
+            <tr>
+                <td>@transaction.TransactionDate.ToShortDateString()</td>
+                <td>@transaction.Amount</td>
+                <td>@transaction.Description</td>
+            </tr>
+        }
+    </table>
+
+    <!-- Pagination logic here -->
+    <ul class="pagination">
+        @for (int i = 1; i <= Math.Ceiling((double)Model.TotalCount / Model.PageSize); i++)
+        {
+            <li><a href="?pageIndex=@i" class="@((i == Model.CurrentPage) ? "active" : "")">@i</a></li>
+        }
+    </ul>
+</div>

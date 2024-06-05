@@ -15,13 +15,11 @@ namespace ExpenseManager.Web.Controllers
             _signInManager = signInManager;
         }
 
-        // Register GET
         public IActionResult Register()
         {
             return View();
         }
 
-        // Register POST
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
@@ -32,7 +30,7 @@ namespace ExpenseManager.Web.Controllers
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Dashboard", "Transaction");
                 }
                 foreach (var error in result.Errors)
                 {
@@ -42,13 +40,11 @@ namespace ExpenseManager.Web.Controllers
             return View(model);
         }
 
-        // Login GET
         public IActionResult Login()
         {
             return View();
         }
 
-        // Login POST
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
@@ -57,7 +53,7 @@ namespace ExpenseManager.Web.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Dashboard", "Transaction");
                 }
                 else
                 {
@@ -68,11 +64,15 @@ namespace ExpenseManager.Web.Controllers
             return View(model);
         }
 
-        // Logout
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
     }
 }

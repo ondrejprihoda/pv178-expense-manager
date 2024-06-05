@@ -7,9 +7,10 @@ namespace ExpenseManager.Web.Models
 {
     public class TransactionViewModel
     {
-        public decimal Amount { get; set; }
-        public DateTime TransactionDate { get; set; }
-        public string Description { get; set; }
-        public int CategoryId { get; set; }
+        public required int Id { get; set; }
+        public required double Amount { get; set; }
+        public required DateTime TransactionDate { get; set; }
+        public required string Description { get; set; }
+        public required int CategoryId { get; set; }
     }
 }

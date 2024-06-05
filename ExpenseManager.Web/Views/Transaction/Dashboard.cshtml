@@ -1,0 +1,24 @@
+﻿@model TransactionDashboardViewModel
+
+<div class="text-center">
+    <div class="display-1">@Model.Balance CZK</div>
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Description</th>
+        </tr>
+        @foreach (var transaction in Model.Transactions)
+        {
+            <tr>
+                <td>@transaction.TransactionDate.ToShortDateString()</td>
+                <td>@transaction.Amount</td>
+                <td>@transaction.Description</td>
+            </tr>
+        }
+    </table>
+
+    <!-- Pagination logic here -->
+
+    <a href="@Url.Action("Index", "Transaction")">View all transactions</a>
+</div>
