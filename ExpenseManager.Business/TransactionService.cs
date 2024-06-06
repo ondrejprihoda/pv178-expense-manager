@@ -21,30 +21,40 @@ public class TransactionService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<(IEnumerable<Transaction>, double)> GetUserTransactionsWithBalance(string userId, int pageIndex, int pageSize)
+    public async Task<(IEnumerable<Transaction>, int)> GetUserTransactions(
+        string userId,
+        int pageIndex,
+        int pageSize,
+        int? categoryId = null,
+        int? month = null,
+        int? year = null,
+        string description = null)
     {
         var transactionsQuery = _context.Transactions
-            .Where(t => t.UserId == userId)
-            .OrderByDescending(t => t.TransactionDate);
+        .Include(t => t.Category)
+        .Where(t => t.UserId == userId);
 
-        var transactions = await transactionsQuery
-            .Skip((pageIndex - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
+        if (categoryId.HasValue)
+        {
+            transactionsQuery = transactionsQuery.Where(t => t.CategoryId == categoryId);
+        }
 
-        var balance = transactionsQuery
-            .AsEnumerable()
-            .Sum(t => t.Amount);
+        if (month.HasValue)
+        {
+            transactionsQuery = transactionsQuery.Where(t => t.TransactionDate.Month == month);
+        }
 
-        return (transactions, balance);
-    }
-    
-    public async Task<(IEnumerable<Transaction>, int)> GetUserTransactions(string userId, int pageIndex, int pageSize)
-    {
-        var transactionsQuery = _context.Transactions
-            .Include(t => t.Category)
-            .Where(t => t.UserId == userId)
-            .OrderByDescending(t => t.TransactionDate);
+        if (year.HasValue)
+        {
+            transactionsQuery = transactionsQuery.Where(t => t.TransactionDate.Year == year);
+        }
+
+        if (!string.IsNullOrWhiteSpace(description))
+        {
+            transactionsQuery = transactionsQuery.Where(t => t.Description.Contains(description));
+        }
+
+        transactionsQuery = transactionsQuery.OrderByDescending(t => t.TransactionDate);
 
         var totalCount = await transactionsQuery.CountAsync();
 

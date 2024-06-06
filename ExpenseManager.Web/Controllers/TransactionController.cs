@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 [Authorize]
@@ -21,11 +22,19 @@ public class TransactionController : Controller
         _userManager = userManager;
     }
 
-    public async Task<IActionResult> Index(int pageIndex = 1, int pageSize = 2)
+    public async Task<IActionResult> Index(
+        int pageIndex = 1,
+        int pageSize = 2,
+        int? categoryId = null,
+        int? month = null,
+        int? year = null,
+        string description = null)
     {
         var userId = _userManager.GetUserId(User);
-        var (transactions, totalCount) = await _transactionService.GetUserTransactions(userId, pageIndex, pageSize);
+        var (transactions, totalCount) = await _transactionService.GetUserTransactions(userId, pageIndex, pageSize, categoryId, month, year, description);
         var balance = await _transactionService.GetUserBalance(userId);
+
+        ViewBag.Categories = await _categoryService.GetUserCategories(userId);
 
         var viewModel = new TransactionIndexViewModel
         {
@@ -33,8 +42,13 @@ public class TransactionController : Controller
             Balance = balance,
             CurrentPage = pageIndex,
             PageSize = pageSize,
-            TotalCount = totalCount
+            TotalCount = totalCount,
+            FilterCategoryId = categoryId,
+            FilterMonth = month,
+            FilterYear = year,
+            FilterDescription = description
         };
+
         return View(viewModel);
     }
 
