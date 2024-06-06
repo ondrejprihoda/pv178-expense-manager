@@ -34,6 +34,7 @@
                 <th>Date</th>
                 <th>Amount</th>
                 <th>Description</th>
+                <th>Category</th>
             </tr>
             @foreach (var transaction in Model.Transactions)
             {
@@ -41,6 +42,7 @@
                     <td>@transaction.TransactionDate.ToShortDateString()</td>
                     <td>@transaction.Amount</td>
                     <td>@transaction.Description</td>
+                    <td>@transaction.Category.Name</td>
                     <td><a href="@Url.Action("Update", "Transaction", new { transactionId = transaction.TransactionId })">Edit</a></td>
                     <td><a href="@Url.Action("Remove", "Transaction", new { transactionId = transaction.TransactionId })">Delete</a></td>
                 </tr>

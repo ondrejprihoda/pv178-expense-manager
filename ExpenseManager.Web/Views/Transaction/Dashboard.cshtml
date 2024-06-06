@@ -10,6 +10,7 @@
                 <th>Date</th>
                 <th>Amount</th>
                 <th>Description</th>
+                <th>Category</th>
             </tr>
             @foreach (var transaction in Model.Transactions)
             {
@@ -17,6 +18,7 @@
                     <td>@transaction.TransactionDate.ToShortDateString()</td>
                     <td>@transaction.Amount</td>
                     <td>@transaction.Description</td>
+                    <td>@transaction.Category.Name</td>
                 </tr>
             }
         </table>

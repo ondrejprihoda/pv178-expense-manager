@@ -32,18 +32,17 @@ public class TransactionService
             .Take(pageSize)
             .ToListAsync();
 
-        // Perform the sum operation in-memory
         var balance = transactionsQuery
-            .AsEnumerable() // Switch to LINQ to Objects
+            .AsEnumerable()
             .Sum(t => t.Amount);
 
         return (transactions, balance);
     }
-
-    // get user transactions with pagination (pageIndex, pageSize and totalCount)
+    
     public async Task<(IEnumerable<Transaction>, int)> GetUserTransactions(string userId, int pageIndex, int pageSize)
     {
         var transactionsQuery = _context.Transactions
+            .Include(t => t.Category)
             .Where(t => t.UserId == userId)
             .OrderByDescending(t => t.TransactionDate);
 
@@ -60,6 +59,7 @@ public class TransactionService
     public async Task<IEnumerable<Transaction>> GetLastNUserTransactions(string userId, int transactionCount)
     {
         return await _context.Transactions
+            .Include(t => t.Category)
             .Where(t => t.UserId == userId)
             .OrderByDescending(t => t.TransactionDate)
             .Take(transactionCount)
@@ -73,7 +73,6 @@ public class TransactionService
             .SumAsync(t => t.Amount);
     }
 
-    // get transaction by id
     public async Task<Transaction?> GetTransaction(int transactionId)
     {
         return await _context.Transactions.FindAsync(transactionId);
@@ -91,7 +90,6 @@ public class TransactionService
         return false;
     }
 
-    // update transaction
     public async Task<bool> UpdateTransaction(Transaction transaction)
     {
         var existingTransaction = await _context.Transactions.FindAsync(transaction.TransactionId);
