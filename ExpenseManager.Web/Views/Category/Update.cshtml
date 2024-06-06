@@ -1,0 +1,17 @@
+﻿@model CategoryViewModel
+
+@{
+    ViewData["Title"] = "Edit Category";
+}
+
+<h2>Edit Category</h2>
+<form asp-action="Update">
+    <div asp-validation-summary="ModelOnly"></div>
+    <input type="hidden" asp-for="UserId" />
+    <input type="hidden" asp-for="CategoryId" />
+    <div>
+        <label>Name</label>
+        <input asp-for="Name" type="text" />
+    </div>
+    <button type="submit">Update Category</button>
+</form>

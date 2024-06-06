@@ -1,7 +1,6 @@
 ﻿@model TransactionIndexViewModel
 
 <style>
-    /* Add your CSS styles here */
     .pagination {
         display: flex;
         list-style: none;
@@ -28,23 +27,69 @@
 <div class="text-center">
     <div class="display-1">@Model.Balance CZK</div>
     <a href="@Url.Action("Add", "Transaction")">Add New Transaction</a>
-    <table>
-        <tr>
-            <th>Date</th>
-            <th>Amount</th>
-            <th>Description</th>
-        </tr>
-        @foreach (var transaction in Model.Transactions)
-        {
-            <tr>
-                <td>@transaction.TransactionDate.ToShortDateString()</td>
-                <td>@transaction.Amount</td>
-                <td>@transaction.Description</td>
-            </tr>
-        }
-    </table>
 
-    <!-- Pagination logic here -->
+    <form method="get" asp-action="Index">
+        <div>
+            <label for="categoryId">Category</label>
+            <select id="categoryId" name="categoryId">
+                <option value="">All</option>
+                <!-- Populate categories -->
+                @foreach (var category in ViewBag.Categories)
+                {
+                    if (category.CategoryId == Model.FilterCategoryId)
+                    {
+                        <option value="@category.CategoryId" selected>@category.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@category.CategoryId">@category.Name</option>
+                    }
+                }
+            </select>
+        </div>
+        <div>
+            <label for="month">Month</label>
+            <input type="number" id="month" name="month" value="@Model.FilterMonth" min="1" max="12" />
+        </div>
+        <div>
+            <label for="year">Year</label>
+            <input type="number" id="year" name="year" value="@Model.FilterYear" />
+        </div>
+        <div>
+            <label for="description">Description</label>
+            <input type="text" id="description" name="description" value="@Model.FilterDescription" />
+        </div>
+        <button type="submit">Filter</button>
+    </form>
+
+    @if (Model.Transactions.Count() > 0)
+    {
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Description</th>
+                <th>Category</th>
+            </tr>
+            @foreach (var transaction in Model.Transactions)
+            {
+                <tr>
+                    <td>@transaction.TransactionDate.ToShortDateString()</td>
+                    <td>@transaction.Amount</td>
+                    <td>@transaction.Description</td>
+                    <td>@transaction.Category.Name</td>
+                    <td><a href="@Url.Action("Update", "Transaction", new { transactionId = transaction.TransactionId })">Edit</a></td>
+                    <td><a href="@Url.Action("Remove", "Transaction", new { transactionId = transaction.TransactionId })">Delete</a></td>
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        <div>No transactions found.</div>
+    }
+
+    <!-- Pagination -->
     <ul class="pagination">
         @for (int i = 1; i <= Math.Ceiling((double)Model.TotalCount / Model.PageSize); i++)
         {

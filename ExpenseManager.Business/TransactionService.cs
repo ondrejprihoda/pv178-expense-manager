@@ -21,31 +21,40 @@ public class TransactionService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<(IEnumerable<Transaction>, double)> GetUserTransactionsWithBalance(string userId, int pageIndex, int pageSize)
+    public async Task<(IEnumerable<Transaction>, int)> GetUserTransactions(
+        string userId,
+        int pageIndex,
+        int pageSize,
+        int? categoryId = null,
+        int? month = null,
+        int? year = null,
+        string description = null)
     {
         var transactionsQuery = _context.Transactions
-            .Where(t => t.UserId == userId)
-            .OrderByDescending(t => t.TransactionDate);
+        .Include(t => t.Category)
+        .Where(t => t.UserId == userId);
 
-        var transactions = await transactionsQuery
-            .Skip((pageIndex - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
+        if (categoryId.HasValue)
+        {
+            transactionsQuery = transactionsQuery.Where(t => t.CategoryId == categoryId);
+        }
 
-        // Perform the sum operation in-memory
-        var balance = transactionsQuery
-            .AsEnumerable() // Switch to LINQ to Objects
-            .Sum(t => t.Amount);
+        if (month.HasValue)
+        {
+            transactionsQuery = transactionsQuery.Where(t => t.TransactionDate.Month == month);
+        }
 
-        return (transactions, balance);
-    }
+        if (year.HasValue)
+        {
+            transactionsQuery = transactionsQuery.Where(t => t.TransactionDate.Year == year);
+        }
 
-    // get user transactions with pagination (pageIndex, pageSize and totalCount)
-    public async Task<(IEnumerable<Transaction>, int)> GetUserTransactions(string userId, int pageIndex, int pageSize)
-    {
-        var transactionsQuery = _context.Transactions
-            .Where(t => t.UserId == userId)
-            .OrderByDescending(t => t.TransactionDate);
+        if (!string.IsNullOrWhiteSpace(description))
+        {
+            transactionsQuery = transactionsQuery.Where(t => t.Description.Contains(description));
+        }
+
+        transactionsQuery = transactionsQuery.OrderByDescending(t => t.TransactionDate);
 
         var totalCount = await transactionsQuery.CountAsync();
 
@@ -60,6 +69,7 @@ public class TransactionService
     public async Task<IEnumerable<Transaction>> GetLastNUserTransactions(string userId, int transactionCount)
     {
         return await _context.Transactions
+            .Include(t => t.Category)
             .Where(t => t.UserId == userId)
             .OrderByDescending(t => t.TransactionDate)
             .Take(transactionCount)
@@ -73,9 +83,35 @@ public class TransactionService
             .SumAsync(t => t.Amount);
     }
 
-    // TODO move into CategoryService
-    public async Task<IEnumerable<Category>> GetAllCategories()
+    public async Task<Transaction?> GetTransaction(int transactionId)
     {
-        return await _context.Categories.ToListAsync();
+        return await _context.Transactions.FindAsync(transactionId);
+    }
+
+    public async Task<bool> RemoveTransaction(int transactionId)
+    {
+        var transaction = await _context.Transactions.FindAsync(transactionId);
+        if (transaction is not null)
+        {
+            _context.Transactions.Remove(transaction);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        return false;
+    }
+
+    public async Task<bool> UpdateTransaction(Transaction transaction)
+    {
+        var existingTransaction = await _context.Transactions.FindAsync(transaction.TransactionId);
+        if (existingTransaction is not null)
+        {
+            existingTransaction.Amount = transaction.Amount;
+            existingTransaction.TransactionDate = transaction.TransactionDate;
+            existingTransaction.Description = transaction.Description;
+            existingTransaction.CategoryId = transaction.CategoryId;
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        return false;
     }
 }

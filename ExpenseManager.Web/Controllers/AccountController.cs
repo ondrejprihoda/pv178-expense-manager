@@ -1,4 +1,5 @@
-﻿using ExpenseManager.Web.Models;
+﻿using ExpenseManager.Business;
+using ExpenseManager.Web.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,11 +9,13 @@ namespace ExpenseManager.Web.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly CategoryService _categoryService;
 
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, CategoryService categoryService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _categoryService = categoryService;
         }
 
         public IActionResult Register()
@@ -30,6 +33,8 @@ namespace ExpenseManager.Web.Controllers
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
+                    var userId = _userManager.GetUserId(User);
+                    await _categoryService.SeedDefaultCategories(userId);
                     return RedirectToAction("Dashboard", "Transaction");
                 }
                 foreach (var error in result.Errors)

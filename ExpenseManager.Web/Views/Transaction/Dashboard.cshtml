@@ -2,23 +2,31 @@
 
 <div class="text-center">
     <div class="display-1">@Model.Balance CZK</div>
-    <table>
-        <tr>
-            <th>Date</th>
-            <th>Amount</th>
-            <th>Description</th>
-        </tr>
-        @foreach (var transaction in Model.Transactions)
-        {
+    <div class="display-6">Recent transactions</div>
+    @if (Model.Transactions.Count() > 0)
+    {
+        <table>
             <tr>
-                <td>@transaction.TransactionDate.ToShortDateString()</td>
-                <td>@transaction.Amount</td>
-                <td>@transaction.Description</td>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Description</th>
+                <th>Category</th>
             </tr>
-        }
-    </table>
-
-    <!-- Pagination logic here -->
-
-    <a href="@Url.Action("Index", "Transaction")">View all transactions</a>
+            @foreach (var transaction in Model.Transactions)
+            {
+                <tr>
+                    <td>@transaction.TransactionDate.ToShortDateString()</td>
+                    <td>@transaction.Amount</td>
+                    <td>@transaction.Description</td>
+                    <td>@transaction.Category.Name</td>
+                </tr>
+            }
+        </table>
+        <a href="@Url.Action("Index", "Transaction")">View all transactions</a>
+    }
+    else
+    {
+        <p>No recent transactions.</p>
+        <p>Add some transactions <a href="@Url.Action("Index", "Transaction")">here</a></p>
+    }
 </div>

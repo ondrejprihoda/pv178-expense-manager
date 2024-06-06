@@ -1,0 +1,34 @@
+﻿@model CategoryIndexViewModel
+
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<div>
+    <div class="text-center display-6">Categories</div>
+    <a href="@Url.Action("Add", "Category")">Add New Category</a>
+
+    @if (TempData["ResultMessage"] is not null)
+    {
+        <div class="alert alert-danger" role="alert">
+            @TempData["ResultMessage"]
+        </div>
+    }
+
+    @if (Model.Categories.Count() > 0)
+    {
+        <table>
+            <tr>
+                <th>Name</th>
+            </tr>
+            @foreach (var category in Model.Categories)
+            {
+                <tr>
+                    <td>@category.Name</td>
+                    <td><a href="@Url.Action("Update", "Category", new { categoryId = category.CategoryId })">Edit</a></td>
+                    <td><a href="@Url.Action("Remove", "Category", new { categoryId = category.CategoryId})">Delete</a></td>
+                </tr>
+            }
+        </table>
+    }
+</div>
