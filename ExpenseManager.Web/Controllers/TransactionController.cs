@@ -5,10 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Text;
-using System.Threading.Tasks;
 
 [Authorize]
 public class TransactionController : Controller
@@ -174,17 +172,65 @@ public class TransactionController : Controller
         var userId = _userManager.GetUserId(User);
         var transactions = await _transactionService.GetUserTransactions(userId);
                     
-        var exportTransactions = transactions.Select(t => new TransactionExportViewModel
+        var exportTransactions = transactions.Select(t => new TransactionImportExportViewModel
         {
-            TransactionId = t.TransactionId,
             Amount = t.Amount,
             TransactionDate = t.TransactionDate,
             Description = t.Description,
+            CategoryId = t.CategoryId,
             CategoryName = t.Category.Name
         }).ToList();
 
         string json = await Task.Run(() => JsonConvert.SerializeObject(exportTransactions, Formatting.Indented));
         byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
         return File(jsonBytes, "application/json", "transactions.json");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ImportTransactions(IFormFile transactionFile)
+    {
+        if (transactionFile == null || transactionFile.Length == 0)
+        {
+            ModelState.AddModelError("File", "Please upload a JSON file.");
+            return View("ImportExport");
+        }
+
+        List<TransactionImportExportViewModel> transactions;
+        using (var reader = new StreamReader(transactionFile.OpenReadStream()))
+        {
+            var fileContent = await reader.ReadToEndAsync();
+            transactions = JsonConvert.DeserializeObject<List<TransactionImportExportViewModel>>(fileContent);
+        }
+
+        var userId = _userManager.GetUserId(User);
+        var categories = await _categoryService.GetUserCategories(userId);
+
+        foreach (var transaction in transactions)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("Transaction", "Invalid transaction data.");
+                return View("ImportExport");
+            }
+
+            if (!categories.Any(c => c.CategoryId == transaction.CategoryId))
+            {
+                ModelState.AddModelError("Category", "Invalid category ID.");
+                return View("ImportExport");
+            }
+
+            var newTransaction = new Transaction
+            {
+                UserId = userId,
+                Amount = transaction.Amount,
+                TransactionDate = transaction.TransactionDate,
+                Description = transaction.Description,
+                CategoryId = transaction.CategoryId
+            };
+
+            await _transactionService.AddTransaction(newTransaction);
+        }
+
+        return RedirectToAction("ImportExport");
     }
 }

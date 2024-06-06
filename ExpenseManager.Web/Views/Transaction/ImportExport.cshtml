@@ -7,3 +7,12 @@
 <p>
     <button onclick="location.href='@Url.Action("ExportTransactions", "Transaction")'" class="btn btn-primary">Export to JSON</button>
 </p>
+
+<h2>Import Transactions</h2>
+<form action="@Url.Action("ImportTransactions", "Transaction")" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="transactionFile">Select JSON file:</label>
+        <input type="file" name="transactionFile" id="transactionFile" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Import</button>
+</form>
