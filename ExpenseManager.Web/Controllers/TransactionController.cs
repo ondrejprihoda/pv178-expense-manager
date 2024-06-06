@@ -14,6 +14,7 @@ public class TransactionController : Controller
     private readonly TransactionService _transactionService;
     private readonly CategoryService _categoryService;
     private readonly UserManager<IdentityUser> _userManager;
+    private const int DashboardTransactionCount = 5;
 
     public TransactionController(TransactionService transactionService, CategoryService categoryService, UserManager<IdentityUser> userManager)
     {
@@ -140,12 +141,23 @@ public class TransactionController : Controller
     public async Task<IActionResult> Dashboard()
     {
         var userId = _userManager.GetUserId(User);
-        var transactions = await _transactionService.GetLastNUserTransactions(userId, 5);
+        var transactions = await _transactionService.GetLastNUserTransactions(userId, DashboardTransactionCount);
         var balance = await _transactionService.GetUserBalance(userId);
+
+        var categorySummaries = transactions
+        .GroupBy(t => t.Category.Name)
+        .Select(g => new CategorySummary
+        {
+            CategoryName = g.Key,
+            TotalAmount = g.Sum(t => t.Amount)
+        })
+        .ToList();
+
         var viewModel = new TransactionDashboardViewModel
         {
             Transactions = transactions,
-            Balance = balance
+            Balance = balance,
+            CategorySummaries = categorySummaries
         };
         return View(viewModel);
     }
