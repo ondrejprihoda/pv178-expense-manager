@@ -23,6 +23,16 @@
             }
         </table>
         <a href="@Url.Action("Index", "Transaction")">View all transactions</a>
+
+
+        <!-- Hidden fields for passing category data to JavaScript -->
+        <input type="hidden" id="categoryNames" value='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.CategorySummaries.Select(cs => cs.CategoryName).ToList()))' />
+        <input type="hidden" id="categoryAmounts" value='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.CategorySummaries.Select(cs => cs.TotalAmount).ToList()))' />
+
+        <!-- Canvas for the pie chart -->
+        <div class="mt-4">
+            <canvas id="dashboardChart"></canvas>
+        </div>
     }
     else
     {
@@ -30,3 +40,6 @@
         <p>Add some transactions <a href="@Url.Action("Index", "Transaction")">here</a></p>
     }
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="~/js/dashboardChart.js"></script>
