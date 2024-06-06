@@ -59,5 +59,24 @@ namespace ExpenseManager.Business
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task AddCategory(Category category)
+        {
+            _context.Categories.Add(category);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> RemoveCategory(int categoryId)
+        {
+            var category = await _context.Categories.FindAsync(categoryId);
+            if (category is not null)
+            {
+                _context.Remove(category);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
     }
 }

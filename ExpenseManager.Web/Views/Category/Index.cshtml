@@ -1,0 +1,26 @@
+﻿@model CategoryIndexViewModel
+
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<div>
+    <div class="text-center display-6">Categories</div>
+    <a href="@Url.Action("Add", "Category")">Add New Category</a>
+    @if (Model.Categories.Count() > 0)
+    {
+        <table>
+            <tr>
+                <th>Name</th>
+            </tr>
+            @foreach (var category in Model.Categories)
+            {
+                <tr>
+                    <td>@category.Name</td>
+                    @* <td><a href="@Url.Action("Update", "Transaction", new { transactionId = transaction.TransactionId })">Edit</a></td> *@
+                    <td><a href="@Url.Action("Remove", "Category", new { categoryId = category.CategoryId})">Delete</a></td>
+                </tr>
+            }
+        </table>
+    }
+</div>
