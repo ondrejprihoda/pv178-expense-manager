@@ -7,6 +7,14 @@
 <div>
     <div class="text-center display-6">Categories</div>
     <a href="@Url.Action("Add", "Category")">Add New Category</a>
+
+    @if (TempData["ResultMessage"] is not null)
+    {
+        <div class="alert alert-danger" role="alert">
+            @TempData["ResultMessage"]
+        </div>
+    }
+
     @if (Model.Categories.Count() > 0)
     {
         <table>

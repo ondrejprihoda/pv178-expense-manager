@@ -59,7 +59,11 @@ public class CategoryController : Controller
 
     public async Task<IActionResult> Remove(int categoryId)
     {
-        await _categoryService.RemoveCategory(categoryId);
+        var wasRemoved = await _categoryService.RemoveCategory(categoryId);
+        if (!wasRemoved)
+        {
+            TempData["ResultMessage"] = "Couldn't remove category. There are associated transactions.";
+        }
         return RedirectToAction("Index");
     }
 }

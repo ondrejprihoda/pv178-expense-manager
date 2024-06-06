@@ -68,8 +68,11 @@ namespace ExpenseManager.Business
 
         public async Task<bool> RemoveCategory(int categoryId)
         {
-            var category = await _context.Categories.FindAsync(categoryId);
-            if (category is not null)
+            var category = await _context.Categories
+                .Include(c => c.Transactions)
+                .FirstOrDefaultAsync(c => c.CategoryId == categoryId);
+
+            if (category is not null && !category.Transactions.Any())
             {
                 _context.Remove(category);
                 await _context.SaveChangesAsync();
