@@ -1,0 +1,9 @@
+﻿@{
+    ViewBag.Title = "Import/Export";
+}
+
+<h2>Export Transactions</h2>
+
+<p>
+    <button onclick="location.href='@Url.Action("ExportTransactions", "Transaction")'" class="btn btn-primary">Export to JSON</button>
+</p>

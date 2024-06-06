@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System.Text;
 using System.Threading.Tasks;
 
 [Authorize]
@@ -32,7 +34,7 @@ public class TransactionController : Controller
         string description = null)
     {
         var userId = _userManager.GetUserId(User);
-        var (transactions, totalCount) = await _transactionService.GetUserTransactions(userId, pageIndex, pageSize, categoryId, month, year, description);
+        var (transactions, totalCount) = await _transactionService.FilterUserTransactions(userId, pageIndex, pageSize, categoryId, month, year, description);
         var balance = await _transactionService.GetUserBalance(userId);
 
         ViewBag.Categories = await _categoryService.GetUserCategories(userId);
@@ -160,5 +162,29 @@ public class TransactionController : Controller
             CategorySummaries = categorySummaries
         };
         return View(viewModel);
+    }
+
+    public IActionResult ImportExport()
+    {
+        return View();
+    }
+
+    public async Task<IActionResult> ExportTransactions()
+    {
+        var userId = _userManager.GetUserId(User);
+        var transactions = await _transactionService.GetUserTransactions(userId);
+                    
+        var exportTransactions = transactions.Select(t => new TransactionExportViewModel
+        {
+            TransactionId = t.TransactionId,
+            Amount = t.Amount,
+            TransactionDate = t.TransactionDate,
+            Description = t.Description,
+            CategoryName = t.Category.Name
+        }).ToList();
+
+        string json = await Task.Run(() => JsonConvert.SerializeObject(exportTransactions, Formatting.Indented));
+        byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
+        return File(jsonBytes, "application/json", "transactions.json");
     }
 }
