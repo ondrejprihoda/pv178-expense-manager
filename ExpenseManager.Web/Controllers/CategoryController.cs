@@ -56,6 +56,51 @@ public class CategoryController : Controller
 
         return View(model);
     }
+    public async Task<IActionResult> Update(int categoryId)
+    {
+        var userId = _userManager.GetUserId(User);
+
+        if (userId is null)
+        {
+            return RedirectToAction("Index");
+        }
+
+        var category = await _categoryService.GetCategory(categoryId, userId);
+        if (category is null)
+        {
+            return RedirectToAction("Index");
+        }
+
+        var model = new CategoryViewModel
+        {
+            CategoryId = category.CategoryId,
+            UserId = category.UserId,
+            Name = category.Name
+        };
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Update(CategoryViewModel model)
+    {
+        var userId = _userManager.GetUserId(User);
+        if (ModelState.IsValid && userId is not null)
+        {
+            var category = new Category
+            {
+                CategoryId = model.CategoryId,
+                UserId = userId,
+                Name = model.Name
+            };
+
+            await _categoryService.UpdateCategory(category);
+            return RedirectToAction("Index");
+        }
+
+        return View(model);
+    }
 
     public async Task<IActionResult> Remove(int categoryId)
     {

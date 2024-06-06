@@ -34,7 +34,7 @@ namespace ExpenseManager.Web.Controllers
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     var userId = _userManager.GetUserId(User);
-                    await _categoryService.SeedInitialCategories(userId);
+                    await _categoryService.SeedDefaultCategories(userId);
                     return RedirectToAction("Dashboard", "Transaction");
                 }
                 foreach (var error in result.Errors)

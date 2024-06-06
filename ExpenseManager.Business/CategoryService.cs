@@ -23,7 +23,6 @@ namespace ExpenseManager.Business
             return await _context.Categories.ToListAsync();
         }
 
-        // get all user categories
         public async Task<IEnumerable<Category>> GetUserCategories(string userId)
         {
             return await _context.Categories
@@ -31,8 +30,13 @@ namespace ExpenseManager.Business
                 .ToListAsync();
         }
 
-        // seed initial categories for user id
-        public async Task SeedInitialCategories(string userId)
+        public async Task<Category?> GetCategory(int categoryId, string userId)
+        {
+            return await _context.Categories
+                .FirstOrDefaultAsync(c => c.CategoryId == categoryId && c.UserId == userId);
+        }
+
+        public async Task SeedDefaultCategories(string userId)
         {
             var categories = new List<Category>
             {
@@ -63,6 +67,12 @@ namespace ExpenseManager.Business
         public async Task AddCategory(Category category)
         {
             _context.Categories.Add(category);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateCategory(Category category)
+        {
+            _context.Categories.Update(category);
             await _context.SaveChangesAsync();
         }
 

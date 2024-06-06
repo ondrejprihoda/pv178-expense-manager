@@ -25,7 +25,7 @@
             {
                 <tr>
                     <td>@category.Name</td>
-                    @* <td><a href="@Url.Action("Update", "Transaction", new { transactionId = transaction.TransactionId })">Edit</a></td> *@
+                    <td><a href="@Url.Action("Update", "Category", new { categoryId = category.CategoryId })">Edit</a></td>
                     <td><a href="@Url.Action("Remove", "Category", new { categoryId = category.CategoryId})">Delete</a></td>
                 </tr>
             }
