@@ -21,7 +21,7 @@ public class TransactionService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<(IEnumerable<Transaction>, int)> GetUserTransactions(
+    public async Task<(IEnumerable<Transaction>, int)> FilterUserTransactions(
         string userId,
         int pageIndex,
         int pageSize,
@@ -64,6 +64,14 @@ public class TransactionService
             .ToListAsync();
 
         return (transactions, totalCount);
+    }
+
+    public async Task<IEnumerable<Transaction>> GetUserTransactions(string userId)
+    {
+        return await _context.Transactions
+            .Include(t => t.Category)
+            .Where(t => t.UserId == userId)
+            .ToListAsync();
     }
 
     public async Task<IEnumerable<Transaction>> GetLastNUserTransactions(string userId, int transactionCount)
