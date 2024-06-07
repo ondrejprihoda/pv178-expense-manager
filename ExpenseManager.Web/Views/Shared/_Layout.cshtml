@@ -30,9 +30,9 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">Categories</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AccessDenied">Statistics</a>
-                            </li>
+                            @*<li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AccessDenied">Stats</a>
+                            </li> *@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Transaction" asp-action="ImportExport">Import & Export</a>
                             </li>
@@ -42,9 +42,9 @@
                         }
                         else
                         {
-                            <li>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AccessDenied">Features</a>
-                            </li>
+                        @*<li>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AccessDenied">Features</a>
+                        </li> *@
                         }
                     </ul>
                     <ul class="navbar-nav flex-grow-1 justify-content-end">
@@ -79,7 +79,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2024 ExpenseManager
+            &copy; 2024 Expense Manager
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
