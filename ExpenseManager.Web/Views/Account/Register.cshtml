@@ -1,26 +1,63 @@
 ﻿@model ExpenseManager.Web.Models.RegisterViewModel
 
 @{
-    ViewBag.Title = "Register";
+    ViewBag.Title = "Sign up";
 }
+
+<style>
+    #errors-alert {
+        display: block;
+    }
+
+    #errors-alert:empty {
+        display: none;
+    }
+</style>
 
 <div>
     <h1 class="text-center display-4">Sign up</h1>
 </div>
 
-<form asp-action="Register" method="post">
-    <div asp-validation-summary="ModelOnly"></div>
-    <div>
-        <label asp-for="Email"></label>
-        <input asp-for="Email" type="email" />
+<form class="mx-auto" asp-action="Register" method="post" style="max-width: 25vw">
+    @* <div id="errors-alert" asp-validation-summary="All" class="alert alert-danger" role="alert"></div> *@
+    @{
+        
+        var modelState = ViewData.ModelState;
+        if (!modelState.IsValid)
+        {
+            @foreach (var state in modelState)
+            {
+                var key = state.Key; // Property name
+                var errors = state.Value.Errors; // List of errors for that property
+
+                foreach (var error in errors)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show my-3" role="alert">
+                        @error.ErrorMessage
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+            }
+        }
+    }
+
+    @if (TempData["ErrorMessage"] is not null) 
+    {
+        <div class="alert alert-danger" role="alert">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+    <div class="mb-3">
+        <label class="form-label" asp-for="Email"></label>
+        <input class="form-control" asp-for="Email" type="email" required />
     </div>
-    <div>
-        <label asp-for="Password"></label>
-        <input asp-for="Password" type="password" />
+    <div class="mb-3">
+        <label class="form-label" asp-for="Password"></label>
+        <input class="form-control" asp-for="Password" type="password" required />
     </div>
-    <div>
-        <label asp-for="ConfirmPassword"></label>
-        <input asp-for="ConfirmPassword" type="password" />
+    <div class="mb-3">
+        <label class="form-label" asp-for="ConfirmPassword">Confirm password</label>
+        <input class="form-control" asp-for="ConfirmPassword" type="password" required />
     </div>
-    <button type="submit">Register</button>
+    <button class="btn btn-primary text-uppercase d-block mx-auto w-50" type="submit">Sign up</button>
 </form>

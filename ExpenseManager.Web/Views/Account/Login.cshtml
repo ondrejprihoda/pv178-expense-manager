@@ -9,7 +9,7 @@
 </div>
 
 <form class="mx-auto" asp-action="Login" method="post" style="max-width: 25vw">
-    @if (TempData["ErrorMessage"] != null)
+    @if (TempData["ErrorMessage"] is not null)
     {
         <div class="alert alert-danger my-3" role="alert">
             @TempData["ErrorMessage"]
