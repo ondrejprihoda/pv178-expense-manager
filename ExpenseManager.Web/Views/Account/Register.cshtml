@@ -45,18 +45,28 @@
         </div>
     }
 
-    <form asp-action="Register" method="post">
+    <form asp-action="Register" method="post" class="needs-validation" novalidate>
         <div class="mb-3">
             <label class="form-label" asp-for="Email"></label>
-            <input class="form-control" asp-for="Email" type="email" required />
+            <input class="form-control" asp-for="Email" type="email" placeholder="john@email.com" required />
         </div>
         <div class="mb-3">
             <label class="form-label" asp-for="Password"></label>
-            <input class="form-control" asp-for="Password" type="password" required />
+            <input 
+                class="form-control" 
+                asp-for="Password" 
+                type="password"
+                placeholder="••••••••••••••••"
+                required />
         </div>
         <div class="mb-3">
             <label class="form-label" asp-for="ConfirmPassword">Confirm password</label>
-            <input class="form-control" asp-for="ConfirmPassword" type="password" required />
+            <input 
+                class="form-control"
+                asp-for="ConfirmPassword"
+                type="password"
+                   placeholder="••••••••••••••••"
+                required />
         </div>
         <button class="btn btn-primary text-uppercase d-block mx-auto w-50" type="submit">Sign up</button>
     </form>
