@@ -145,7 +145,7 @@ public class TransactionService
         var transactions = new List<Transaction>
         {
             // January Transactions
-            new Transaction { UserId = userId, Amount = 30000, TransactionDate = new DateTime(2024, 1, 1), Description = "Salary", CategoryId = incomeCategory },
+            new Transaction { UserId = userId, Amount = 50000, TransactionDate = new DateTime(2024, 1, 1), Description = "Salary", CategoryId = incomeCategory },
             new Transaction { UserId = userId, Amount = -3500, TransactionDate = new DateTime(2024, 1, 5), Description = "Grocery Shopping", CategoryId = groceriesCategory },
             new Transaction { UserId = userId, Amount = -15000, TransactionDate = new DateTime(2024, 1, 1), Description = "Monthly Rent", CategoryId = rentCategory },
             new Transaction { UserId = userId, Amount = -2500, TransactionDate = new DateTime(2024, 1, 10), Description = "Electricity Bill", CategoryId = utilitiesCategory },
@@ -158,7 +158,7 @@ public class TransactionService
             new Transaction { UserId = userId, Amount = -1200, TransactionDate = new DateTime(2024, 1, 22), Description = "Miscellaneous Expenses", CategoryId = miscellaneousCategory },
 
             // February Transactions
-            new Transaction { UserId = userId, Amount = 30000, TransactionDate = new DateTime(2024, 2, 1), Description = "Salary", CategoryId = incomeCategory },
+            new Transaction { UserId = userId, Amount = 45000, TransactionDate = new DateTime(2024, 2, 1), Description = "Salary", CategoryId = incomeCategory },
             new Transaction { UserId = userId, Amount = -4000, TransactionDate = new DateTime(2024, 2, 5), Description = "Grocery Shopping", CategoryId = groceriesCategory },
             new Transaction { UserId = userId, Amount = -15000, TransactionDate = new DateTime(2024, 2, 1), Description = "Monthly Rent", CategoryId = rentCategory },
             new Transaction { UserId = userId, Amount = -2700, TransactionDate = new DateTime(2024, 2, 10), Description = "Water Bill", CategoryId = utilitiesCategory },
@@ -184,7 +184,7 @@ public class TransactionService
             new Transaction { UserId = userId, Amount = -1200, TransactionDate = new DateTime(2024, 3, 22), Description = "Miscellaneous Expenses", CategoryId = miscellaneousCategory },
 
             // April Transactions
-            new Transaction { UserId = userId, Amount = 30000, TransactionDate = new DateTime(2024, 4, 1), Description = "Salary", CategoryId = incomeCategory },
+            new Transaction { UserId = userId, Amount = 60000, TransactionDate = new DateTime(2024, 4, 1), Description = "Salary", CategoryId = incomeCategory },
             new Transaction { UserId = userId, Amount = -4000, TransactionDate = new DateTime(2024, 4, 5), Description = "Grocery Shopping", CategoryId = groceriesCategory },
             new Transaction { UserId = userId, Amount = -15000, TransactionDate = new DateTime(2024, 4, 1), Description = "Monthly Rent", CategoryId = rentCategory },
             new Transaction { UserId = userId, Amount = -2700, TransactionDate = new DateTime(2024, 4, 10), Description = "Internet Bill", CategoryId = utilitiesCategory },
@@ -197,7 +197,7 @@ public class TransactionService
             new Transaction { UserId = userId, Amount = -1500, TransactionDate = new DateTime(2024, 4, 22), Description = "Miscellaneous Expenses", CategoryId = miscellaneousCategory },
 
             // May Transactions
-            new Transaction { UserId = userId, Amount = 30000, TransactionDate = new DateTime(2024, 5, 1), Description = "Salary", CategoryId = incomeCategory },
+            new Transaction { UserId = userId, Amount = 50000, TransactionDate = new DateTime(2024, 5, 1), Description = "Salary", CategoryId = incomeCategory },
             new Transaction { UserId = userId, Amount = -3500, TransactionDate = new DateTime(2024, 5, 5), Description = "Grocery Shopping", CategoryId = groceriesCategory },
             new Transaction { UserId = userId, Amount = -15000, TransactionDate = new DateTime(2024, 5, 1), Description = "Monthly Rent", CategoryId = rentCategory },
             new Transaction { UserId = userId, Amount = -2500, TransactionDate = new DateTime(2024, 5, 10), Description = "Electricity Bill", CategoryId = utilitiesCategory },

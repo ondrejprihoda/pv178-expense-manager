@@ -1,6 +1,6 @@
 [
   {
-    "Amount": 30000.0,
+    "Amount": 50000.0,
     "TransactionDate": "2024-01-01T00:00:00",
     "Description": "Salary",
     "CategoryId": 32,
@@ -77,7 +77,7 @@
     "CategoryName": "Miscellaneous"
   },
   {
-    "Amount": 30000.0,
+    "Amount": 45000.0,
     "TransactionDate": "2024-02-01T00:00:00",
     "Description": "Salary",
     "CategoryId": 32,
@@ -231,7 +231,7 @@
     "CategoryName": "Miscellaneous"
   },
   {
-    "Amount": 30000.0,
+    "Amount": 60000.0,
     "TransactionDate": "2024-04-01T00:00:00",
     "Description": "Salary",
     "CategoryId": 32,
@@ -308,7 +308,7 @@
     "CategoryName": "Miscellaneous"
   },
   {
-    "Amount": 30000.0,
+    "Amount": 50000.0,
     "TransactionDate": "2024-05-01T00:00:00",
     "Description": "Salary",
     "CategoryId": 32,
