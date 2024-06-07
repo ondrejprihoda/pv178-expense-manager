@@ -15,6 +15,7 @@ public class TransactionController : Controller
     private readonly CategoryService _categoryService;
     private readonly UserManager<IdentityUser> _userManager;
     private const int DashboardTransactionCount = 5;
+    private const int PageSize = 10;
 
     public TransactionController(TransactionService transactionService, CategoryService categoryService, UserManager<IdentityUser> userManager)
     {
@@ -25,7 +26,7 @@ public class TransactionController : Controller
 
     public async Task<IActionResult> Index(
         int pageIndex = 1,
-        int pageSize = 2,
+        int pageSize = PageSize,
         int? categoryId = null,
         int? month = null,
         int? year = null,
