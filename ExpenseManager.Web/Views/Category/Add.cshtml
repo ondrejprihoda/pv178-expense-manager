@@ -9,11 +9,32 @@
     <h1 class="text-center display-4">Add category</h1>
 </div>
 
-<form asp-action="Add">
-    <div asp-validation-summary="ModelOnly"></div>
-    <div>
-        <label>Name</label>
-        <input asp-for="Name" type="text" />
-    </div>
-    <button type="submit">Add Category</button>
-</form>
+<div class="mx-auto" style="max-width: 25vw">
+    @* Validation errors *@
+    @{
+
+        var modelState = ViewData.ModelState;
+        if (!modelState.IsValid)
+        {
+            @foreach (var state in modelState)
+            {
+                var key = state.Key; // Property name
+                var errors = state.Value.Errors; // List of errors for that property
+
+                foreach (var error in errors)
+                {
+                    <div class="alert alert-danger my-3" role="alert">@error.ErrorMessage</div>
+                }
+            }
+        }
+    }
+
+    <form class="mx-auto" asp-action="Add" style="max-width: 25vw">
+        <div asp-validation-summary="ModelOnly"></div>
+        <div class="mb-3">
+            <label class="form-label" asp-for="Name">Name</label>
+            <input class="form-control" asp-for="Name" type="text" required />
+        </div>
+        <button class="btn btn-success text-uppercase d-block mx-auto" type="submit">Add category</button>
+    </form>
+</div>
