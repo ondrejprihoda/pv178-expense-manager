@@ -26,7 +26,7 @@
             }
         }
 
-        if (TempData["TransactionIgnored"] is not null)
+        if (TempData["TransactionIgnored"] is not null && (int)TempData["TransactionIgnored"] > 0)
         {
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 Ignored @TempData["TransactionIgnored"] invalid transactions!
@@ -34,7 +34,7 @@
             </div>
         }
 
-        if (TempData["TransactionAdded"] is not null)
+        if (TempData["TransactionAdded"] is not null && (int)TempData["TransactionAdded"] > 0)
         {
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 Successfully imported @TempData["TransactionAdded"] transactions.

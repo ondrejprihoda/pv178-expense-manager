@@ -296,4 +296,24 @@ public class TransactionController : Controller
 
         return (transactionsIgnored, transactionsAdded);
     }
+
+    public IActionResult Dev()
+    {
+        return View();
+    }
+
+    public async Task<IActionResult> SeedTransactions()
+    {
+        var userId = _userManager.GetUserId(User);
+        await _transactionService.SeedDefaultTransactions(userId);
+        return RedirectToAction(nameof(Index));
+    }
+
+    // remove all transactions
+    public async Task<IActionResult> RemoveAll()
+    {
+        var userId = _userManager.GetUserId(User);
+        await _transactionService.RemoveAllUserTransactions(userId);
+        return RedirectToAction(nameof(Index));
+    }
 }
