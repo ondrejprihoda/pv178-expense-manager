@@ -1,0 +1,15 @@
+﻿@model TransactionViewModel
+
+@{
+    ViewBag.Title = "Dev options";
+}
+
+<div>
+    <h1 class="text-center display-4 mb-4">Dev options</h1>
+</div>
+
+<div class="text-center">
+    <div class="alert alert-warning w-50 mx-auto" role="alert">Warning, these features might be unstable!</div>
+    <button type="button" class="btn btn-success text-uppercase" onclick="location.href='@Url.Action("SeedTransactions", "Transaction")'">Add transactions</button>
+    <button type="button" class="btn btn-danger text-uppercase" onclick="location.href='@Url.Action("RemoveAll", "Transaction")'">Delete transactions</button>
+</div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ExpenseManager</title>
+    <title>@ViewBag.Title | ExpenseManager</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ExpenseManager.Web.styles.css" asp-append-version="true" />
@@ -30,18 +30,21 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">Categories</a>
                             </li>
+                            @*<li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AccessDenied">Stats</a>
+                            </li> *@
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AccessDenied">Statistics</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Transaction" asp-action="ImportExport">Import & Export</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Transaction" asp-action="ImportExport">Import/Export</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Transaction" asp-action="Dev">[Dev]</a>
                             </li>
                         }
                         else
                         {
-                            <li>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AccessDenied">Features</a>
-                            </li>
+                        @*<li>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AccessDenied">Features</a>
+                        </li> *@
                         }
                     </ul>
                     <ul class="navbar-nav flex-grow-1 justify-content-end">
@@ -51,16 +54,16 @@
                                 <div class="nav-link text-dark">@User.Identity.Name</div>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Log out</a>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Sign up</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Log in</a>
                             </li>
                         }
                     </ul>
@@ -76,7 +79,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2024 ExpenseManager
+            &copy; 2024 Expense Manager
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

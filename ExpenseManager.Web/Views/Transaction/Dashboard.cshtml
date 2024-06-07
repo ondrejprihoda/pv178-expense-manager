@@ -1,43 +1,77 @@
 ﻿@model TransactionDashboardViewModel
 
-<div class="text-center">
-    <div class="display-1">@Model.Balance CZK</div>
-    <div class="display-6">Recent transactions</div>
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+<div>
+    <h1 class="text-center display-4 mb-4">Dashboard</h1>
+    
+    <div class="text-center mb-4">
+        <p class="lead text-uppercase mb-1">Balance</p>
+        <h2>@Model.Balance CZK</h2>
+    </div>
+
     @if (Model.Transactions.Count() > 0)
     {
-        <table>
-            <tr>
-                <th>Date</th>
-                <th>Amount</th>
-                <th>Description</th>
-                <th>Category</th>
-            </tr>
-            @foreach (var transaction in Model.Transactions)
-            {
-                <tr>
-                    <td>@transaction.TransactionDate.ToShortDateString()</td>
-                    <td>@transaction.Amount</td>
-                    <td>@transaction.Description</td>
-                    <td>@transaction.Category.Name</td>
-                </tr>
-            }
-        </table>
-        <a href="@Url.Action("Index", "Transaction")">View all transactions</a>
+        <div class="d-flex justify-content-evenly">
+            <div class="mx-5">
+                <p class="lead text-uppercase text-center mb-1">Recent transactions</p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Description</th>
+                            <th>Category</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var transaction in Model.Transactions)
+                        {
+                            <tr>
+                                <td>@transaction.TransactionDate.ToShortDateString()</td>
+                                <td>@transaction.Amount</td>
+                                <td>@transaction.Description</td>
+                                <td>@transaction.Category.Name</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
 
+                <button type="button"
+                        class="btn btn-primary d-block mx-auto my-2 text-uppercase"
+                        onclick="location.href='@Url.Action("Index", "Transaction")'">
+                    View all transactions
+                </button>
+            </div>
 
-        <!-- Hidden fields for passing category data to JavaScript -->
-        <input type="hidden" id="categoryNames" value='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.CategorySummaries.Select(cs => cs.CategoryName).ToList()))' />
-        <input type="hidden" id="categoryAmounts" value='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.CategorySummaries.Select(cs => cs.TotalAmount).ToList()))' />
+            <div class="mx-5" style="width: 33%">
+                    <!-- Hidden fields for passing category data to JavaScript -->
+                    <input type="hidden" id="categoryNames" value='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.CategorySummaries.Select(cs => cs.CategoryName).ToList()))' />
+                    <input type="hidden" id="categoryAmounts" value='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.CategorySummaries.Select(cs => cs.TotalAmount).ToList()))' />
 
-        <!-- Canvas for the pie chart -->
-        <div class="mt-4">
-            <canvas id="dashboardChart"></canvas>
+                    <!-- Canvas for the pie chart -->
+                    <div>
+                        <p class="lead text-uppercase text-center mb-1">Transactions by category</p>
+                        <div>
+                            <canvas id="dashboardChart"></canvas>
+                        </div>
+                    </div>
+                </div>
         </div>
+        
     }
     else
     {
-        <p>No recent transactions.</p>
-        <p>Add some transactions <a href="@Url.Action("Index", "Transaction")">here</a></p>
+        <div class="text-center mx-auto">
+            <p class="lead">We can show you more once you add some transactions.</p>
+            <button type="button"
+                    class="btn btn-primary d-block mx-auto my-2 text-uppercase"
+                    onclick="location.href='@Url.Action("Index", "Transaction")'">
+                Add some transactions
+            </button>
+        </div>
     }
 </div>
 

@@ -50,7 +50,15 @@ public class CategoryController : Controller
                 Name = model.Name
             };
 
-            await _categoryService.AddCategory(category);
+            var wasAdded = await _categoryService.AddCategory(category);
+            if (wasAdded)
+            {
+                TempData["SuccessMessage"] = "Category added successfully.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Couldn't add category.";
+            }
             return RedirectToAction("Index");
         }
 
@@ -95,7 +103,15 @@ public class CategoryController : Controller
                 Name = model.Name
             };
 
-            await _categoryService.UpdateCategory(category);
+            var wasUpdated = await _categoryService.UpdateCategory(category);
+            if (wasUpdated)
+            {
+                TempData["SuccessMessage"] = "Category updated successfully.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Couldn't update category.";
+            }
             return RedirectToAction("Index");
         }
 
@@ -105,9 +121,13 @@ public class CategoryController : Controller
     public async Task<IActionResult> Remove(int categoryId)
     {
         var wasRemoved = await _categoryService.RemoveCategory(categoryId);
-        if (!wasRemoved)
+        if (wasRemoved)
         {
-            TempData["ResultMessage"] = "Couldn't remove category. There are associated transactions.";
+            TempData["SuccessMessage"] = "Category removed successfully.";
+        }
+        else
+        {
+            TempData["ErrorMessage"] = "Couldn't remove category. There are associated transactions.";
         }
         return RedirectToAction("Index");
     }

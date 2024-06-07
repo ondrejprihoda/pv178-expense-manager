@@ -1,37 +1,22 @@
 ﻿@model TransactionIndexViewModel
 
-<style>
-    .pagination {
-        display: flex;
-        list-style: none;
-        padding: 0;
-    }
+@{
+    ViewBag.Title = "Transactions";
+}
 
-        .pagination li {
-            margin-right: 5px;
-        }
+<h1 class="text-center display-4 mb-4">Transactions</h1>
 
-            .pagination li a {
-                text-decoration: none;
-                padding: 5px 10px;
-                border: 1px solid #ccc;
-                color: #333;
-            }
+<button type="button"
+        class="btn btn-primary text-uppercase d-block mx-auto mb-4"
+        onclick="location.href='@Url.Action("Add", "Transaction")'">
+    Add new transaction
+</button>
 
-                .pagination li a.active {
-                    background-color: #007bff;
-                    color: #fff;
-                }
-</style>
-
-<div class="text-center">
-    <div class="display-1">@Model.Balance CZK</div>
-    <a href="@Url.Action("Add", "Transaction")">Add New Transaction</a>
-
-    <form method="get" asp-action="Index">
-        <div>
-            <label for="categoryId">Category</label>
-            <select id="categoryId" name="categoryId">
+<div class="mx-auto">
+    <form method="get" asp-action="Index" class="row align-items-end justify-content-center mb-4 needs-validation" novalidate>
+        <div class="col-auto">
+            <label class="form-label" for="categoryId">Category</label>
+            <select class="form-select" id="categoryId" name="categoryId">
                 <option value="">All</option>
                 <!-- Populate categories -->
                 @foreach (var category in ViewBag.Categories)
@@ -47,53 +32,103 @@
                 }
             </select>
         </div>
-        <div>
-            <label for="month">Month</label>
-            <input type="number" id="month" name="month" value="@Model.FilterMonth" min="1" max="12" />
+        <div class="col-auto">
+            <label class="form-label" for="month">Month</label>
+            <input class="form-control" type="number" id="month" name="month" value="@Model.FilterMonth" min="1" max="12" />
         </div>
-        <div>
-            <label for="year">Year</label>
-            <input type="number" id="year" name="year" value="@Model.FilterYear" />
+        <div class="col-auto">
+            <label class="form-label" for="year">Year</label>
+            <input class="form-control" type="number" id="year" name="year" min="1000" max="3000" value="@Model.FilterYear" />
         </div>
-        <div>
-            <label for="description">Description</label>
-            <input type="text" id="description" name="description" value="@Model.FilterDescription" />
+        <div class="col-auto">
+            <label class="form-label" for="description">Description</label>
+            <input class="form-control" type="text" id="description" name="description" value="@Model.FilterDescription" />
         </div>
-        <button type="submit">Filter</button>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-secondary">Filter</button>
+        </div>
     </form>
+
+    <div class="mx-auto" style="max-width: 25vw">
+        @if (TempData["ErrorMessage"] is not null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        @if (TempData["SuccessMessage"] is not null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+    </div>
 
     @if (Model.Transactions.Count() > 0)
     {
-        <table>
-            <tr>
-                <th>Date</th>
-                <th>Amount</th>
-                <th>Description</th>
-                <th>Category</th>
-            </tr>
-            @foreach (var transaction in Model.Transactions)
-            {
+        <table class="table table-hover mx-auto mb-4" style="max-width: 45vw">
+            <thead>
                 <tr>
-                    <td>@transaction.TransactionDate.ToShortDateString()</td>
-                    <td>@transaction.Amount</td>
-                    <td>@transaction.Description</td>
-                    <td>@transaction.Category.Name</td>
-                    <td><a href="@Url.Action("Update", "Transaction", new { transactionId = transaction.TransactionId })">Edit</a></td>
-                    <td><a href="@Url.Action("Remove", "Transaction", new { transactionId = transaction.TransactionId })">Delete</a></td>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th></th>
                 </tr>
-            }
+            </thead>
+            <tbody>
+                @foreach (var transaction in Model.Transactions)
+                {
+                    <tr>
+                        <td>@transaction.TransactionDate.ToShortDateString()</td>
+                        <td>@transaction.Amount</td>
+                        <td>@transaction.Description</td>
+                        <td>@transaction.Category.Name</td>
+                        <td class="text-end">
+                            <button type="button"
+                                    class="btn btn-outline-primary text-uppercase"
+                                    onclick="location.href='@Url.Action("Update", "Transaction", new { transactionId = transaction.TransactionId })'">
+                                Edit
+                            </button>
+                            <button type="button"
+                                    class="btn btn-outline-danger text-uppercase"
+                                    onclick="location.href='@Url.Action("Remove", "Transaction", new { transactionId = transaction.TransactionId })'">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
         </table>
     }
     else
     {
-        <div>No transactions found.</div>
+        <div class="text-center mx-auto mb-4">
+            <p class="lead">No transactions match the specified filters. Try a broader search.</p>
+        </div>
     }
 
-    <!-- Pagination -->
-    <ul class="pagination">
+    <ul class="pagination justify-content-center my-4">
         @for (int i = 1; i <= Math.Ceiling((double)Model.TotalCount / Model.PageSize); i++)
         {
-            <li><a href="?pageIndex=@i" class="@((i == Model.CurrentPage) ? "active" : "")">@i</a></li>
+            <li class="page-item @((i == Model.CurrentPage) ? "active" : "")">
+                <a 
+                    class="page-link"
+                    href="@Url.Action("Index", 
+                    new { 
+                        pageIndex = i, 
+                        pageSize = Model.PageSize, 
+                        categoryId = Model.FilterCategoryId, 
+                        month = Model.FilterMonth, 
+                        year = Model.FilterYear, 
+                        description = Model.FilterDescription 
+                    })">
+                    @i
+                </a>
+            </li>
         }
     </ul>
 </div>
