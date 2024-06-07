@@ -1,18 +1,73 @@
 ﻿@{
-    ViewBag.Title = "Import/Export";
+    ViewBag.Title = "Import & Export";
 }
 
-<h2>Export Transactions</h2>
+<h1 class="text-center display-4 mb-4">Import & Export</h1>
 
-<p>
-    <button onclick="location.href='@Url.Action("ExportTransactions", "Transaction")'" class="btn btn-primary">Export to JSON</button>
-</p>
+<div class="mx-auto mb-4" style="max-width: 25vw">
+    @* Validation errors *@
+    @{
 
-<h2>Import Transactions</h2>
-<form action="@Url.Action("ImportTransactions", "Transaction")" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label for="transactionFile">Select JSON file:</label>
-        <input type="file" name="transactionFile" id="transactionFile" class="form-control" />
+        var modelState = ViewData.ModelState;
+        if (!modelState.IsValid)
+        {
+            @foreach (var state in modelState)
+            {
+                var key = state.Key; // Property name
+                var errors = state.Value.Errors; // List of errors for that property
+
+                foreach (var error in errors)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        @error.ErrorMessage
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+            }
+        }
+
+        if (TempData["TransactionIgnored"] is not null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                Ignored @TempData["TransactionIgnored"] invalid transactions!
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        if (TempData["TransactionAdded"] is not null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                Successfully imported @TempData["TransactionAdded"] transactions.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+    }
+</div>
+
+<div class="d-flex justify-content-evenly">
+    <div>
+        <div class="text-center">
+            <p class="lead text-uppercase mb-1">Import transactions</p>
+            <p>Upload a JSON file with transactions to import.</p>
+        </div>
+        <form action="@Url.Action("ImportTransactions", "Transaction")" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+            <div class="mb-3">
+                @* <label class="form-label" for="transactionFile">Select JSON file:</label> *@
+                <input class="form-control" type="file" name="transactionFile" id="transactionFile" required />
+            </div>
+            <button type="submit" class="btn btn-primary d-block mx-auto">Import</button>
+        </form>
     </div>
-    <button type="submit" class="btn btn-primary">Import</button>
-</form>
+
+    <div class="text-center">
+        <p class="lead text-uppercase mb-1">Export transactions</p>
+        <p>Export all transactions to a JSON file.</p>
+        <button 
+            type="button"
+            class="btn btn-primary text-uppercase"
+            onclick="location.href='@Url.Action("ExportTransactions", "Transaction")'">
+            Export
+        </button>
+    </div>
+</div>
+

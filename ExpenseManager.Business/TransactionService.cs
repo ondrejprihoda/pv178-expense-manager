@@ -15,10 +15,11 @@ public class TransactionService
         _context = context;
     }
 
-    public async Task AddTransaction(Transaction transaction)
+    public async Task<bool> AddTransaction(Transaction transaction)
     {
         _context.Transactions.Add(transaction);
-        await _context.SaveChangesAsync();
+        var entitiesWritten = await _context.SaveChangesAsync();
+        return entitiesWritten > 0;
     }
 
     public async Task<(IEnumerable<Transaction>, int)> FilterUserTransactions(

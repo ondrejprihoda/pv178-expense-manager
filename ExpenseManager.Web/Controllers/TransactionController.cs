@@ -197,27 +197,53 @@ public class TransactionController : Controller
         }
 
         List<TransactionImportExportViewModel> transactions;
-        using (var reader = new StreamReader(transactionFile.OpenReadStream()))
+        try
         {
-            var fileContent = await reader.ReadToEndAsync();
-            transactions = JsonConvert.DeserializeObject<List<TransactionImportExportViewModel>>(fileContent);
+            using (var reader = new StreamReader(transactionFile.OpenReadStream()))
+            {
+                var fileContent = await reader.ReadToEndAsync();
+                transactions = JsonConvert.DeserializeObject<List<TransactionImportExportViewModel>>(fileContent);
+            }
+        }
+        catch (JsonException)
+        {
+            ModelState.AddModelError("File", "Invalid JSON format.");
+            return View("ImportExport");
+        }
+        catch (Exception)
+        {
+            ModelState.AddModelError("File", "Error reading the file.");
+            return View("ImportExport");
         }
 
         var userId = _userManager.GetUserId(User);
         var categories = await _categoryService.GetUserCategories(userId);
 
+        var (transactionsIgnored, transactionsAdded) = await ProcessTransactions(transactions, userId, categories);
+
+        TempData["TransactionAdded"] = transactionsAdded;
+        TempData["TransactionIgnored"] = transactionsIgnored;
+        return RedirectToAction("ImportExport");
+    }
+
+    private async Task<(int transactionsIgnored, int transactionsAdded)> ProcessTransactions(
+    List<TransactionImportExportViewModel> transactions, string userId, IEnumerable<Category> categories)
+    {
+        var transactionsIgnored = 0;
+        var transactionsAdded = 0;
+
         foreach (var transaction in transactions)
         {
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("Transaction", "Invalid transaction data.");
-                return View("ImportExport");
+                transactionsIgnored++;
+                continue;
             }
 
             if (!categories.Any(c => c.CategoryId == transaction.CategoryId))
             {
-                ModelState.AddModelError("Category", "Invalid category ID.");
-                return View("ImportExport");
+                transactionsIgnored++;
+                continue;
             }
 
             var newTransaction = new Transaction
@@ -229,9 +255,17 @@ public class TransactionController : Controller
                 CategoryId = transaction.CategoryId
             };
 
-            await _transactionService.AddTransaction(newTransaction);
+            var wasAdded = await _transactionService.AddTransaction(newTransaction);
+            if (wasAdded)
+            {
+                transactionsAdded++;
+            }
+            else
+            {
+                transactionsIgnored++;
+            }
         }
 
-        return RedirectToAction("ImportExport");
+        return (transactionsIgnored, transactionsAdded);
     }
 }
