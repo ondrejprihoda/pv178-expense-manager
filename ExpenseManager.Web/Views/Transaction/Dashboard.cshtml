@@ -60,8 +60,14 @@
     }
     else
     {
-        <p>No recent transactions.</p>
-        <p>Add some transactions <a href="@Url.Action("Index", "Transaction")">here</a></p>
+        <div class="text-center mx-auto">
+            <p class="lead">We can show you more once you add some transactions.</p>
+            <button type="button"
+                    class="btn btn-primary d-block mx-auto my-2 text-uppercase"
+                    onclick="location.href='@Url.Action("Index", "Transaction")'">
+                Add some transactions
+            </button>
+        </div>
     }
 </div>
 
