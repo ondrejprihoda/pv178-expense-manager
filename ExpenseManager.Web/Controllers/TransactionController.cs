@@ -15,7 +15,7 @@ public class TransactionController : Controller
     private readonly CategoryService _categoryService;
     private readonly UserManager<IdentityUser> _userManager;
     private const int DashboardTransactionCount = 5;
-    private const int PageSize = 10;
+    private const int PageSize = 7;
 
     public TransactionController(TransactionService transactionService, CategoryService categoryService, UserManager<IdentityUser> userManager)
     {
@@ -24,6 +24,7 @@ public class TransactionController : Controller
         _userManager = userManager;
     }
 
+    [HttpGet]
     public async Task<IActionResult> Index(
         int pageIndex = 1,
         int pageSize = PageSize,
@@ -34,14 +35,12 @@ public class TransactionController : Controller
     {
         var userId = _userManager.GetUserId(User);
         var (transactions, totalCount) = await _transactionService.FilterUserTransactions(userId, pageIndex, pageSize, categoryId, month, year, description);
-        var balance = await _transactionService.GetUserBalance(userId);
 
         ViewBag.Categories = await _categoryService.GetUserCategories(userId);
 
         var viewModel = new TransactionIndexViewModel
         {
             Transactions = transactions.ToList(),
-            Balance = balance,
             CurrentPage = pageIndex,
             PageSize = pageSize,
             TotalCount = totalCount,
@@ -77,7 +76,17 @@ public class TransactionController : Controller
                 Description = model.Description,
                 CategoryId = model.CategoryId
             };
-            await _transactionService.AddTransaction(transaction);
+
+            var wasAdded = await _transactionService.AddTransaction(transaction);
+            if (wasAdded)
+            {
+                TempData["SuccessMessage"] = "Transaction added successfully.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Couldn't add transaction.";
+            }
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -87,7 +96,16 @@ public class TransactionController : Controller
 
     public async Task<IActionResult> Remove(int transactionId)
     {
-        await _transactionService.RemoveTransaction(transactionId);
+        var wasRemoved = await _transactionService.RemoveTransaction(transactionId);
+        if (wasRemoved)
+        {
+            TempData["SuccessMessage"] = "Transaction removed successfully.";
+        }
+        else
+        {
+            TempData["ErrorMessage"] = "Couldn't remove transaction.";
+        }
+
         string referringUrl = Request.Headers["Referer"].ToString();
         return Redirect(referringUrl);
     }
@@ -131,7 +149,17 @@ public class TransactionController : Controller
                 Description = model.Description,
                 CategoryId = model.CategoryId
             };
-            await _transactionService.UpdateTransaction(transaction);
+
+            var wasUpdated = await _transactionService.UpdateTransaction(transaction);
+            if (wasUpdated)
+            {
+                TempData["SuccessMessage"] = "Transaction updated successfully.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Couldn't update transaction.";
+            }
+
             return RedirectToAction(nameof(Index));
         }
 
