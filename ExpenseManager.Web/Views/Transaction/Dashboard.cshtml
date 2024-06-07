@@ -15,32 +15,36 @@
     @if (Model.Transactions.Count() > 0)
     {
         <div class="d-flex justify-content-evenly">
-                <div class="mx-5" style="width: fit-content; max-width: 33%">
-                    <p class="lead text-uppercase text-center mb-1">Recent transactions</p>
-                    <div class="d-grid">
-                    <div class="row fw-bold pb-2">
-                            <div class="col-3 px-4">Date</div>
-                            <div class="col-3 px-4">Amount</div>
-                            <div class="col-3 px-4">Description</div>
-                            <div class="col-3 px-4">Category</div>
-                        </div>
+            <div class="mx-5">
+                <p class="lead text-uppercase text-center mb-1">Recent transactions</p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Description</th>
+                            <th>Category</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         @foreach (var transaction in Model.Transactions)
                         {
-                            <div class="row pb-1">
-                                <div class="col-3 px-4">@transaction.TransactionDate.ToShortDateString()</div>
-                                <div class="col-3 px-4">@transaction.Amount</div>
-                                <div class="col-3 px-4">@transaction.Description</div>
-                                <div class="col-3 px-4">@transaction.Category.Name</div>
-                            </div>
+                            <tr>
+                                <td>@transaction.TransactionDate.ToShortDateString()</td>
+                                <td>@transaction.Amount</td>
+                                <td>@transaction.Description</td>
+                                <td>@transaction.Category.Name</td>
+                            </tr>
                         }
-                    </div>
-                    <button 
-                        type="button"
+                    </tbody>
+                </table>
+
+                <button type="button"
                         class="btn btn-primary d-block mx-auto my-2 text-uppercase"
                         onclick="location.href='@Url.Action("Index", "Transaction")'">
-                        View all transactions
-                    </button>
-                </div>
+                    View all transactions
+                </button>
+            </div>
 
             <div class="mx-5" style="width: 33%">
                     <!-- Hidden fields for passing category data to JavaScript -->
