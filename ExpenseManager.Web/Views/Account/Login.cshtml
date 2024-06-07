@@ -1,5 +1,9 @@
 ﻿@model ExpenseManager.Web.Models.LoginViewModel
 
+@{
+    ViewBag.Title = "Log in";
+}
+
 <form asp-action="Login" method="post">
     <div asp-validation-summary="ModelOnly"></div>
     <div>
@@ -14,5 +18,5 @@
         <input asp-for="RememberMe" type="checkbox" />
         <label asp-for="RememberMe"></label>
     </div>
-    <button type="submit">Login</button>
+    <button type="submit">Log in</button>
 </form>
