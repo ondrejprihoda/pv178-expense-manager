@@ -4,19 +4,28 @@
     ViewBag.Title = "Log in";
 }
 
-<form asp-action="Login" method="post">
-    <div asp-validation-summary="ModelOnly"></div>
-    <div>
-        <label asp-for="Email"></label>
-        <input asp-for="Email" type="email" />
+<div>
+    <h1 class="text-center display-4">Log in</h1>
+</div>
+
+<form class="mx-auto" asp-action="Login" method="post" style="max-width: 25vw">
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger my-3" role="alert">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+    <div class="mb-3">
+        <label class="form-label" asp-for="Email"></label>
+        <input class="form-control" asp-for="Email" type="email" required />
     </div>
-    <div>
-        <label asp-for="Password"></label>
-        <input asp-for="Password" type="password" />
+    <div class="mb-3">
+        <label class="form-label" asp-for="Password"></label>
+        <input class="form-control" asp-for="Password" type="password" required />
     </div>
-    <div>
-        <input asp-for="RememberMe" type="checkbox" />
-        <label asp-for="RememberMe"></label>
+    <div class="mb-3">
+        <input class="form-check-input" asp-for="RememberMe" type="checkbox" />
+        <label class="form-check-label" asp-for="RememberMe">Remember me</label>
     </div>
-    <button type="submit">Log in</button>
+    <button class="btn btn-primary d-block mx-auto text-uppercase w-50" type="submit">Log in</button>
 </form>

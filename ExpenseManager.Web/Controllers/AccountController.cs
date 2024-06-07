@@ -62,7 +62,7 @@ namespace ExpenseManager.Web.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    TempData["ErrorMessage"] = "Invalid login attempt.";
                     return View(model);
                 }
             }
