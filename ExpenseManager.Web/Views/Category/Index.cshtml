@@ -5,31 +5,62 @@
 }
 
 <div>
-    <h1 class="text-center display-4">Categories</h1>
+    <h1 class="text-center display-4 mb-4">Categories</h1>
 
-    <a href="@Url.Action("Add", "Category")">Add New Category</a>
+    <button 
+        type="button" 
+        class="btn btn-primary text-uppercase d-block mx-auto my-4" 
+        onclick="location.href='@Url.Action("Add", "Category")'">
+        Add new category
+    </button>
 
-    @if (TempData["ResultMessage"] is not null)
-    {
-        <div class="alert alert-danger" role="alert">
-            @TempData["ResultMessage"]
-        </div>
-    }
+    <div class="mx-auto" style="max-width: 25vw">
+        @if (TempData["ErrorMessage"] is not null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["ResultMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
 
-    @if (Model.Categories.Count() > 0)
-    {
-        <table>
-            <tr>
-                <th>Name</th>
-            </tr>
-            @foreach (var category in Model.Categories)
-            {
-                <tr>
-                    <td>@category.Name</td>
-                    <td><a href="@Url.Action("Update", "Category", new { categoryId = category.CategoryId })">Edit</a></td>
-                    <td><a href="@Url.Action("Remove", "Category", new { categoryId = category.CategoryId})">Delete</a></td>
-                </tr>
-            }
-        </table>
-    }
+        @if (TempData["SuccessMessage"] is not null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        @if (Model.Categories.Count() > 0)
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var category in Model.Categories)
+                    {
+                        <tr>
+                            <td>@category.Name</td>
+                            <td class="text-end">
+                                <button type="button"
+                                        class="btn btn-outline-primary text-uppercase"
+                                        onclick="location.href='@Url.Action("Update", "Category", new { categoryId = category.CategoryId })'">
+                                    Edit
+                                </button>
+                                <button type="button"
+                                        class="btn btn-outline-danger text-uppercase"
+                                        onclick="location.href='@Url.Action("Remove", "Category", new { categoryId = category.CategoryId })'">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
 </div>

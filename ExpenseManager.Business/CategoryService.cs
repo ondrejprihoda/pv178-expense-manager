@@ -64,16 +64,18 @@ namespace ExpenseManager.Business
             await _context.SaveChangesAsync();
         }
 
-        public async Task AddCategory(Category category)
+        public async Task<bool> AddCategory(Category category)
         {
             _context.Categories.Add(category);
-            await _context.SaveChangesAsync();
+            var entriesWritten = await _context.SaveChangesAsync();
+            return entriesWritten > 0;
         }
 
-        public async Task UpdateCategory(Category category)
+        public async Task<bool> UpdateCategory(Category category)
         {
             _context.Categories.Update(category);
-            await _context.SaveChangesAsync();
+            var entitiesWritten = await _context.SaveChangesAsync();
+            return entitiesWritten > 0;
         }
 
         public async Task<bool> RemoveCategory(int categoryId)
