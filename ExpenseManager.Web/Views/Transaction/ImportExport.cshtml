@@ -34,12 +34,22 @@
             </div>
         }
 
-        if (TempData["TransactionAdded"] is not null && (int)TempData["TransactionAdded"] > 0)
+        if (TempData["TransactionAdded"] is not null)
         {
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                Successfully imported @TempData["TransactionAdded"] transactions.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
+            if ((int)TempData["TransactionAdded"] > 0)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    Successfully imported @TempData["TransactionAdded"] transactions.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>               
+            }
+            else
+            {
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    No transactions were imported.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
         }
     }
 </div>

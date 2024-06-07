@@ -13,7 +13,7 @@
 </button>
 
 <div class="mx-auto">
-    <form method="get" asp-action="Index" class="row align-items-end justify-content-center mb-4">
+    <form method="get" asp-action="Index" class="row align-items-end justify-content-center mb-4 needs-validation" novalidate>
         <div class="col-auto">
             <label class="form-label" for="categoryId">Category</label>
             <select class="form-select" id="categoryId" name="categoryId">
@@ -38,7 +38,7 @@
         </div>
         <div class="col-auto">
             <label class="form-label" for="year">Year</label>
-            <input class="form-control" type="number" id="year" name="year" value="@Model.FilterYear" />
+            <input class="form-control" type="number" id="year" name="year" min="1000" max="3000" value="@Model.FilterYear" />
         </div>
         <div class="col-auto">
             <label class="form-label" for="description">Description</label>
