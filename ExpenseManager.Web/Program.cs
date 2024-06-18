@@ -12,7 +12,11 @@ builder.Services.AddScoped<CategoryService>();
 
 // Configure Entity Framework and Identity
 builder.Services.AddDbContext<ExpenseManagerDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        options => options.EnableRetryOnFailure()
+        )
+    );
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ExpenseManagerDbContext>();
 
